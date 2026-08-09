@@ -1,0 +1,15 @@
+{
+  "projects": {
+    "default": "vaulted-acolyte-387217"
+  },
+  "targets": {
+    "vaulted-acolyte-387217": {
+      "hosting": {
+        "g9admin": [
+          "jeonyoungjae-g9admin"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}

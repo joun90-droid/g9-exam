@@ -1,0 +1,112 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #f2f7f6;
+  --panel: #ffffff;
+  --card: #f0fafa;
+  --border: #cce3df;
+  --text: #0f1f1c;
+  --muted: #3d5c56;
+  --accent: #0f766e;
+  --accent2: #0d9488;
+  --success: #059669;
+  --danger: #dc2626;
+  --gold: #b45309;
+  --memory-bg: #ecfdf5;
+  --memory-border: #99f6e4;
+  --exam-bg: #fef3c7;
+  --exam-border: #fcd34d;
+}
+
+.dark {
+  --bg: #071412;
+  --panel: #0c1c19;
+  --card: #122622;
+  --border: #1e3d37;
+  --text: #e7f5f2;
+  --muted: #8ab5ae;
+  --accent: #2dd4bf;
+  --accent2: #5eead4;
+  --success: #34d399;
+  --danger: #f87171;
+  --gold: #fbbf24;
+  --memory-bg: #0a1f1b;
+  --memory-border: #115e59;
+  --exam-bg: #1c1910;
+  --exam-border: #92400e;
+}
+
+@theme inline {
+  --color-re-bg: var(--bg);
+  --color-re-panel: var(--panel);
+  --color-re-card: var(--card);
+  --color-re-border: var(--border);
+  --color-re-text: var(--text);
+  --color-re-muted: var(--muted);
+  --color-re-accent: var(--accent);
+  --color-re-accent2: var(--accent2);
+  --color-re-success: var(--success);
+  --color-re-danger: var(--danger);
+  --color-re-gold: var(--gold);
+  --font-sans: var(--font-geist-sans);
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  min-height: 100dvh;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 50% at 0% -10%, color-mix(in srgb, var(--accent) 14%, transparent), transparent),
+    radial-gradient(ellipse 60% 40% at 100% 0%, color-mix(in srgb, var(--accent2) 10%, transparent), transparent);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.dark body::before {
+  background:
+    radial-gradient(ellipse 70% 50% at 50% -20%, rgba(59, 130, 246, 0.12), transparent),
+    radial-gradient(ellipse 50% 30% at 100% 100%, rgba(14, 165, 233, 0.06), transparent);
+}
+
+@layer components {
+  .glass {
+    @apply rounded-2xl border border-re-border bg-re-panel/95 shadow-sm backdrop-blur-md;
+  }
+  .chip {
+    @apply inline-flex shrink-0 items-center rounded-full border border-re-border bg-re-card px-3 py-1.5 text-xs font-medium text-re-muted transition;
+  }
+  .chip-on {
+    @apply border-re-accent bg-re-accent/15 text-re-accent font-semibold;
+  }
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-re-accent px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:brightness-110 disabled:opacity-50;
+  }
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl border border-re-border bg-re-card px-4 py-2 text-sm text-re-text transition hover:border-re-accent/50;
+  }
+  .memory-box {
+    background: var(--memory-bg);
+    border: 1px solid var(--memory-border);
+    @apply rounded-xl p-3 text-sm leading-relaxed;
+  }
+  .exam-box {
+    background: var(--exam-bg);
+    border: 1px solid var(--exam-border);
+    @apply rounded-xl p-3 text-sm leading-relaxed;
+  }
+  .prose-detail {
+    @apply text-sm leading-[1.75] text-re-muted;
+  }
+  .prose-detail p + p {
+    @apply mt-3;
+  }
+}
