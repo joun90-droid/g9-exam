@@ -6,24 +6,39 @@ import { clearOxProgress, loadOxProgress, saveOxAnswer } from "@/lib/storage";
 import { CATEGORY_LABELS, ROUND_LABELS, SOURCE_LABELS, type OxCategory, type OxSource } from "@/lib/types";
 import { BookOpen, Check, HelpCircle, Lightbulb, RotateCcw, Scale, X, XCircle } from "lucide-react";
 
+const ROUND_CATEGORIES: Record<1 | 2, OxCategory[]> = {
+  1: ["admin-theory", "admin-org", "admin-policy"],
+  2: ["law-act", "law-remedy"],
+};
+
 export function OxQuizPanel() {
+  const [round, setRound] = useState<1 | 2>(1);
   const [category, setCategory] = useState<OxCategory | "all">("all");
   const [source, setSource] = useState<OxSource | "all">("all");
-  const [round, setRound] = useState<1 | 2 | "all">("all");
   const [idx, setIdx] = useState(0);
   const [picked, setPicked] = useState<boolean | null>(null);
   const [showHint, setShowHint] = useState(false);
   const [progress, setProgress] = useState(loadOxProgress);
+
+  const roundCategories = ROUND_CATEGORIES[round];
 
   const questions = useMemo(
     () =>
       filterQuestions({
         category: category === "all" ? undefined : category,
         source: source === "all" ? undefined : source,
-        round: round === "all" ? undefined : round,
+        round,
       }),
     [category, source, round]
   );
+
+  const selectRound = (r: 1 | 2) => {
+    setRound(r);
+    setCategory("all");
+    setIdx(0);
+    setPicked(null);
+    setShowHint(false);
+  };
 
   useEffect(() => {
     if (questions.length > 0 && idx >= questions.length) setIdx(0);
@@ -109,20 +124,15 @@ export function OxQuizPanel() {
         </div>
       </div>
 
-      <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none">
-        {(["all", 1, 2] as const).map((r) => (
+      <div className="grid grid-cols-2 gap-2">
+        {([1, 2] as const).map((r) => (
           <button
-            key={String(r)}
+            key={r}
             type="button"
-            onClick={() => {
-              setRound(r);
-              setIdx(0);
-              setPicked(null);
-              setShowHint(false);
-            }}
-            className={`chip ${round === r ? "chip-on" : ""}`}
+            onClick={() => selectRound(r)}
+            className={`chip justify-center ${round === r ? "chip-on" : ""}`}
           >
-            {r === "all" ? "전체" : ROUND_LABELS[r]}
+            {ROUND_LABELS[r]}
           </button>
         ))}
       </div>
@@ -137,9 +147,9 @@ export function OxQuizPanel() {
           }}
           className={`chip ${category === "all" ? "chip-on" : ""}`}
         >
-          전체 단원
+          {ROUND_LABELS[round]} 전체
         </button>
-        {(Object.keys(CATEGORY_LABELS) as OxCategory[]).map((c) => (
+        {roundCategories.map((c) => (
           <button
             key={c}
             type="button"
